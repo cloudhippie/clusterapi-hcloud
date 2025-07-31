@@ -73,6 +73,7 @@
                   kubectl-slice
                   nixfmt-rfc-style
                   yamlfmt
+                  yamllint
                   yq-go
                 ];
               };
