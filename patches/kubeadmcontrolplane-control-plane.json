@@ -1,0 +1,135 @@
+[
+  {
+    "op": "add",
+    "path": "/metadata/name",
+    "value": "${CLUSTER_NAME}-control-plane"
+  },
+  {
+    "op": "remove",
+    "path": "/metadata/namespace"
+  },
+  {
+    "op": "add",
+    "path": "/spec/kubeadmConfigSpec/clusterConfiguration/networking",
+    "value": {}
+  },
+  {
+    "op": "add",
+    "path": "/spec/kubeadmConfigSpec/clusterConfiguration/networking/serviceSubnet",
+    "value": "10.96.0.0/12"
+  },
+  {
+    "op": "add",
+    "path": "/spec/kubeadmConfigSpec/clusterConfiguration/networking/podSubnet",
+    "value": "10.1.0.0/16"
+  },
+  {
+    "op": "add",
+    "path": "/spec/kubeadmConfigSpec/clusterConfiguration/apiServer/certSANs",
+    "value": []
+  },
+  {
+    "op": "remove",
+    "path": "/spec/kubeadmConfigSpec/clusterConfiguration/apiServer/extraArgs/cloud-provider"
+  },
+  {
+    "op": "add",
+    "path": "/spec/kubeadmConfigSpec/clusterConfiguration/apiServer/extraArgs/kubelet-preferred-address-types",
+    "value": "InternalIP,ExternalIP,Hostname"
+  },
+  {
+    "op": "add",
+    "path": "/spec/kubeadmConfigSpec/clusterConfiguration/apiServer/extraArgs/oidc-client-id",
+    "value": "kubernetes"
+  },
+  {
+    "op": "add",
+    "path": "/spec/kubeadmConfigSpec/clusterConfiguration/apiServer/extraArgs/oidc-username-claim",
+    "value": "preferred_username"
+  },
+  {
+    "op": "add",
+    "path": "/spec/kubeadmConfigSpec/clusterConfiguration/apiServer/extraArgs/oidc-username-prefix",
+    "value": "oidc:"
+  },
+  {
+    "op": "add",
+    "path": "/spec/kubeadmConfigSpec/clusterConfiguration/apiServer/extraArgs/oidc-groups-claim",
+    "value": "groups"
+  },
+  {
+    "op": "add",
+    "path": "/spec/kubeadmConfigSpec/clusterConfiguration/apiServer/extraArgs/oidc-groups-prefix",
+    "value": "oidc:"
+  },
+  {
+    "op": "add",
+    "path": "/spec/kubeadmConfigSpec/clusterConfiguration/controllerManager/extraArgs/bind-address",
+    "value": "0.0.0.0"
+  },
+  {
+    "op": "add",
+    "path": "/spec/kubeadmConfigSpec/clusterConfiguration/scheduler/extraArgs/bind-address",
+    "value": "0.0.0.0"
+  },
+  {
+    "op": "add",
+    "path": "/spec/kubeadmConfigSpec/clusterConfiguration/etcd/local/extraArgs/listen-client-urls",
+    "value": "https://0.0.0.0:2379"
+  },
+  {
+    "op": "add",
+    "path": "/spec/kubeadmConfigSpec/clusterConfiguration/etcd/local/extraArgs/listen-peer-urls",
+    "value": "https://0.0.0.0:2380"
+  },
+  {
+    "op": "add",
+    "path": "/spec/kubeadmConfigSpec/files/2/content",
+    "value": "net.bridge.bridge-nf-call-iptables = 1\nnet.bridge.bridge-nf-call-ip6tables = 1\nnet.ipv4.ip_forward = 1\nnet.ipv6.conf.all.forwarding = 1\nnet.ipv6.conf.all.accept_ra = 0\nnet.ipv6.conf.default.accept_ra = 0"
+  },
+  {
+    "op": "add",
+    "path": "/spec/kubeadmConfigSpec/initConfiguration/localAPIEndpoint",
+    "value": {}
+  },
+  {
+    "op": "add",
+    "path": "/spec/kubeadmConfigSpec/initConfiguration/localAPIEndpoint/advertiseAddress",
+    "value": "PRIVATE_IP"
+  },
+  {
+    "op": "add",
+    "path": "/spec/kubeadmConfigSpec/joinConfiguration/controlPlane",
+    "value": {}
+  },
+  {
+    "op": "add",
+    "path": "/spec/kubeadmConfigSpec/joinConfiguration/controlPlane/localAPIEndpoint",
+    "value": {}
+  },
+  {
+    "op": "add",
+    "path": "/spec/kubeadmConfigSpec/joinConfiguration/controlPlane/localAPIEndpoint/advertiseAddress",
+    "value": "PRIVATE_IP"
+  },
+  {
+    "op": "add",
+    "path": "/spec/kubeadmConfigSpec/preKubeadmCommands/-",
+    "value": "ip -4 -o addr show scope global | awk '$4 ~ /^10\\./ {print $4}' | cut -d/ -f1 | head -n1 > /etc/private-ip"
+  },
+  {
+    "op": "add",
+    "path": "/spec/kubeadmConfigSpec/preKubeadmCommands/-",
+    "value": "echo \"KUBELET_EXTRA_ARGS=--node-ip=$(cat /etc/private-ip)\" > /etc/default/kubelet"
+  },
+  {
+    "op": "add",
+    "path": "/spec/kubeadmConfigSpec/preKubeadmCommands/-",
+    "value": "sed -i \"s/PRIVATE_IP/$(cat /etc/private-ip)/g\" /run/kubeadm/*.yaml"
+  },
+  {
+    "op": "add",
+    "path": "/spec/machineTemplate/infrastructureRef/name",
+    "value": "${CLUSTER_NAME}-control-plane"
+  }
+]

@@ -1,0 +1,61 @@
+[
+  {
+    "op": "add",
+    "path": "/metadata/name",
+    "value": "${CLUSTER_NAME}-fsn1"
+  },
+  {
+    "op": "remove",
+    "path": "/metadata/namespace"
+  },
+  {
+    "op": "add",
+    "path": "/metadata/labels/nodepool",
+    "value": "${CLUSTER_NAME}-fsn1"
+  },
+  {
+    "op": "add",
+    "path": "/metadata/labels/cluster",
+    "value": "${CLUSTER_NAME}"
+  },
+  {
+    "op": "add",
+    "path": "/spec/clusterName",
+    "value": "${CLUSTER_NAME}"
+  },
+  {
+    "op": "add",
+    "path": "/spec/replicas",
+    "value": "${WORKER_MACHINE_COUNT}"
+  },
+  {
+    "op": "add",
+    "path": "/spec/template/metadata/labels/nodepool",
+    "value": "${CLUSTER_NAME}-fsn1"
+  },
+  {
+    "op": "add",
+    "path": "/spec/template/metadata/labels/cluster",
+    "value": "${CLUSTER_NAME}"
+  },
+  {
+    "op": "add",
+    "path": "/spec/template/spec/clusterName",
+    "value": "${CLUSTER_NAME}"
+  },
+  {
+    "op": "add",
+    "path": "/spec/template/spec/failureDomain",
+    "value": "fsn1"
+  },
+  {
+    "op": "add",
+    "path": "/spec/template/spec/bootstrap/configRef/name",
+    "value": "${CLUSTER_NAME}-worker"
+  },
+  {
+    "op": "add",
+    "path": "/spec/template/spec/infrastructureRef/name",
+    "value": "${CLUSTER_NAME}-worker"
+  }
+]

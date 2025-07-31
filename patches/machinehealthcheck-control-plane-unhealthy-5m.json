@@ -1,0 +1,16 @@
+[
+  {
+    "op": "add",
+    "path": "/metadata/name",
+    "value": "${CLUSTER_NAME}-control-plane-unhealthy-5m"
+  },
+  {
+    "op": "remove",
+    "path": "/metadata/namespace"
+  },
+  {
+    "op": "add",
+    "path": "/spec/clusterName",
+    "value": "${CLUSTER_NAME}"
+  }
+]

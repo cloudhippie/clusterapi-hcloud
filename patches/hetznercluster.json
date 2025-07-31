@@ -1,0 +1,49 @@
+[
+  {
+    "op": "add",
+    "path": "/metadata/name",
+    "value": "${CLUSTER_NAME}"
+  },
+  {
+    "op": "remove",
+    "path": "/metadata/namespace"
+  },
+  {
+    "op": "add",
+    "path": "/spec/controlPlaneEndpoint/host",
+    "value": "cluster-${CLUSTER_NAME}.cloudhippie.net"
+  },
+  {
+    "op": "add",
+    "path": "/spec/controlPlaneLoadBalancer/enabled",
+    "value": false
+  },
+  {
+    "op": "remove",
+    "path": "/spec/controlPlaneLoadBalancer/region"
+  },
+  {
+    "op": "add",
+    "path": "/spec/controlPlaneRegions",
+    "value": [
+      "fsn1",
+      "nbg1",
+      "hel1"
+    ]
+  },
+  {
+    "op": "add",
+    "path": "/spec/hcloudNetwork/enabled",
+    "value": true
+  },
+  {
+    "op": "add",
+    "path": "/spec/hcloudPlacementGroups/1/name",
+    "value": "worker"
+  },
+  {
+    "op": "add",
+    "path": "/spec/sshKeys/hcloud/0/name",
+    "value": "${SSH_KEY_NAME}"
+  }
+]

@@ -1,0 +1,50 @@
+[
+  {
+    "op": "add",
+    "path": "/metadata/name",
+    "value": "${CLUSTER_NAME}"
+  },
+  {
+    "op": "remove",
+    "path": "/metadata/namespace"
+  },
+  {
+    "op": "add",
+    "path": "/metadata/labels",
+    "value": {}
+  },
+  {
+    "op": "add",
+    "path": "/metadata/labels/cluster",
+    "value": "${CLUSTER_NAME}"
+  },
+  {
+    "op": "add",
+    "path": "/spec/clusterNetwork/services",
+    "value": {}
+  },
+  {
+    "op": "add",
+    "path": "/spec/clusterNetwork/services/cidrBlocks",
+    "value": [
+      "10.96.0.0/12"
+    ]
+  },
+  {
+    "op": "add",
+    "path": "/spec/clusterNetwork/pods/cidrBlocks",
+    "value": [
+      "10.1.0.0/16"
+    ]
+  },
+  {
+    "op": "add",
+    "path": "/spec/controlPlaneRef/name",
+    "value": "${CLUSTER_NAME}-control-plane"
+  },
+  {
+    "op": "add",
+    "path": "/spec/infrastructureRef/name",
+    "value": "${CLUSTER_NAME}"
+  }
+]

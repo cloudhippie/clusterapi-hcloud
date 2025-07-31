@@ -1,0 +1,21 @@
+[
+  {
+    "op": "add",
+    "path": "/metadata/name",
+    "value": "${CLUSTER_NAME}-worker"
+  },
+  {
+    "op": "remove",
+    "path": "/metadata/namespace"
+  },
+  {
+    "op": "add",
+    "path": "/spec/template/spec/placementGroupName",
+    "value": "worker"
+  },
+  {
+    "op": "add",
+    "path": "/spec/template/spec/type",
+    "value": "${HCLOUD_WORKER_MACHINE_TYPE}"
+  }
+]

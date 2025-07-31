@@ -1,0 +1,105 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+export WORKING_DIR="processing"
+export PATCH_DIR="patches"
+export TARGET_FILE="template.yaml"
+
+export SSH_KEY_NAME="terraform"
+export HCLOUD_REGION="fsn1"
+export HCLOUD_CONTROL_PLANE_MACHINE_TYPE="cx22"
+export HCLOUD_WORKER_MACHINE_TYPE="cx22"
+
+rm -rf ${WORKING_DIR}
+mkdir -p ${WORKING_DIR}
+
+clusterctl generate cluster dummy \
+    --infrastructure hetzner:v1.0.6 \
+    --target-namespace cluster-dummy \
+    --kubernetes-version v100.0.0 \
+    --control-plane-machine-count=3 \
+    --worker-machine-count=1 \
+    >| ${WORKING_DIR}/dummy.yaml
+
+kubectl slice -f ${WORKING_DIR}/dummy.yaml -o ${WORKING_DIR}/
+rm -f ${WORKING_DIR}/dummy.yaml
+
+mv ${WORKING_DIR}/cluster-dummy.yaml ${WORKING_DIR}/cluster.yaml
+mv ${WORKING_DIR}/hetznercluster-dummy.yaml ${WORKING_DIR}/hetznercluster.yaml
+mv ${WORKING_DIR}/hcloudmachinetemplate-dummy-control-plane.yaml ${WORKING_DIR}/hcloudmachinetemplate-control-plane.yaml
+mv ${WORKING_DIR}/kubeadmcontrolplane-dummy-control-plane.yaml ${WORKING_DIR}/kubeadmcontrolplane-control-plane.yaml
+mv ${WORKING_DIR}/machinehealthcheck-dummy-control-plane-unhealthy-5m.yaml ${WORKING_DIR}/machinehealthcheck-control-plane-unhealthy-5m.yaml
+mv ${WORKING_DIR}/kubeadmconfigtemplate-dummy-md-0.yaml ${WORKING_DIR}/kubeadmconfigtemplate-worker.yaml
+mv ${WORKING_DIR}/machinehealthcheck-dummy-md-0-unhealthy-5m.yaml ${WORKING_DIR}/machinehealthcheck-worker-unhealthy-5m.yaml
+mv ${WORKING_DIR}/hcloudmachinetemplate-dummy-md-0.yaml ${WORKING_DIR}/hcloudmachinetemplate-worker.yaml
+mv ${WORKING_DIR}/machinedeployment-dummy-md-0.yaml ${WORKING_DIR}/machinedeployment-fsn1.yaml
+
+for FILE in ${WORKING_DIR}/*.yaml; do
+    for PATCH in ${PATCH_DIR}/$(basename ${FILE} .yaml); do
+        if test -f "${PATCH}.json"; then
+            echo "Applying ${PATCH}.json"
+            cat "${FILE}" \
+                | yq -o json eval \
+                | json-patch --patch-file=${PATCH}.json \
+                | yq -P eval - \
+                >| ${FILE}.temp
+
+            mv ${FILE}.temp ${FILE} && rm -f ${FILE}.temp
+        fi
+    done
+
+    yamlfmt "${FILE}"
+
+    sed -i '1i ---' "${FILE}"
+    echo >> "${FILE}"
+    echo "..." >> "${FILE}"
+done
+
+cp ${WORKING_DIR}/machinedeployment-fsn1.yaml ${WORKING_DIR}/machinedeployment-nbg1.yaml
+sed -i 's/fsn1/nbg1/g' ${WORKING_DIR}/machinedeployment-nbg1.yaml
+
+cp ${WORKING_DIR}/machinedeployment-fsn1.yaml ${WORKING_DIR}/machinedeployment-hel1.yaml
+sed -i 's/fsn1/hel1/g' ${WORKING_DIR}/machinedeployment-hel1.yaml
+
+cat << 'EOF' > ${WORKING_DIR}/resourcesets.yaml
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-${CLUSTER_NAME}-oidc
+data:
+  cluster-${CLUSTER_NAME}-oidc.yaml: |
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRoleBinding
+    metadata:
+      name: oidc:cluster-${CLUSTER_NAME}
+    roleRef:
+      apiGroup: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: cluster-admin
+    subjects:
+      - apiGroup: rbac.authorization.k8s.io
+        kind: Group
+        name: oidc:cluster-${CLUSTER_NAME}
+
+...
+---
+apiVersion: addons.cluster.x-k8s.io/v1beta1
+kind: ClusterResourceSet
+metadata:
+  name: cluster-${CLUSTER_NAME}-oidc
+spec:
+  strategy: Reconcile
+  clusterSelector:
+    matchLabels:
+      cluster: ${CLUSTER_NAME}
+  resources:
+    - name: cluster-${CLUSTER_NAME}-oidc
+      kind: ConfigMap
+
+...
+EOF
+
+cat ${WORKING_DIR}/*.yaml >| ${TARGET_FILE}
+sed -i 's|v100.0.0|${KUBERNETES_VERSION}|' ${TARGET_FILE}
+rm -rf ${WORKING_DIR}

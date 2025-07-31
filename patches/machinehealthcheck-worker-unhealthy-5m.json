@@ -1,0 +1,25 @@
+[
+  {
+    "op": "add",
+    "path": "/metadata/name",
+    "value": "${CLUSTER_NAME}-worker-unhealthy-5m"
+  },
+  {
+    "op": "remove",
+    "path": "/metadata/namespace"
+  },
+  {
+    "op": "add",
+    "path": "/spec/clusterName",
+    "value": "${CLUSTER_NAME}"
+  },
+  {
+    "op": "add",
+    "path": "/spec/selector/matchLabels/cluster",
+    "value": "${CLUSTER_NAME}"
+  },
+  {
+    "op": "remove",
+    "path": "/spec/selector/matchLabels/nodepool"
+  }
+]
