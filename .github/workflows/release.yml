@@ -20,6 +20,17 @@ jobs:
         with:
           token: ${{ secrets.BOT_ACCESS_TOKEN }}
 
+      - name: Install nix
+        uses: cachix/install-nix-action@v26
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+
+      - name: Enable cachix
+        uses: cachix/cachix-action@v14
+        with:
+          name: devenv
+
       - name: Write buildtime
         run: date >| .github/RELEASE
 
