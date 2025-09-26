@@ -119,14 +119,19 @@
             "@semantic-release/git",
             {
                 "message": "chore: release ${nextRelease.version}",
-                "assets": ["CHANGELOG.md", "template.yaml"]
+                "assets": [
+                    "CHANGELOG.md",
+                    "template.yaml"
+                ]
             }
         ],
         [
             "@semantic-release/github",
             {
                 "publish": true,
-                "assets": ["template.yaml"]
+                "assets": [
+                    "template.yaml"
+                ]
             }
         ]
     ]
