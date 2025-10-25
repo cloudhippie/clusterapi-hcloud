@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/cloudhippie/clusterapi-hcloud/compare/v1.0.0...v1.1.0) (2025-10-25)
+
+
+### Features
+
+* integrate fsnotify config for all nodes ([5deaf51](https://github.com/cloudhippie/clusterapi-hcloud/commit/5deaf514e615a833e189a4bae64b5de2a144ec0d))
+
 ## 1.0.0 (2025-07-31)
 
 
