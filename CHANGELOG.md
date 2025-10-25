@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/cloudhippie/clusterapi-hcloud/compare/v1.1.0...v1.1.1) (2025-10-25)
+
+
+### Bugfixes
+
+* sysctl command gets already executed ([f9918c0](https://github.com/cloudhippie/clusterapi-hcloud/commit/f9918c068e0f6518ffe0645b94b5bca5e8f5f03a))
+
 ## [1.1.0](https://github.com/cloudhippie/clusterapi-hcloud/compare/v1.0.0...v1.1.0) (2025-10-25)
 
 
