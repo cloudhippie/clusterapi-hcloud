@@ -15,6 +15,19 @@
   },
   {
     "op": "add",
+    "path": "/spec/template/spec/files/-",
+    "value": {
+      "path": "/etc/sysctl.d/99-fsnotify.conf",
+      "content": "fs.inotify.max_user_instances = 8192\nfs.inotify.max_user_watches = 1048576\nfs.inotify.max_queued_events = 65536"
+    }
+  },
+  {
+    "op": "add",
+    "path": "/spec/template/spec/preKubeadmCommands/-",
+    "value": "sysctl --system"
+  },
+  {
+    "op": "add",
     "path": "/spec/template/spec/preKubeadmCommands/-",
     "value": "ip -4 -o addr show scope global | awk '$4 ~ /^10\\./ {print $4}' | cut -d/ -f1 | head -n1 > /etc/private-ip"
   },

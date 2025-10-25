@@ -201,6 +201,11 @@ spec:
           owner: root:root
           path: /etc/systemd/system/containerd.service
           permissions: "0744"
+        - path: /etc/sysctl.d/99-fsnotify.conf
+          content: |-
+            fs.inotify.max_user_instances = 8192
+            fs.inotify.max_user_watches = 1048576
+            fs.inotify.max_queued_events = 65536
       joinConfiguration:
         nodeRegistration:
           kubeletExtraArgs:
@@ -253,6 +258,7 @@ spec:
         - echo 'source <(kubectl completion bash)' >>/root/.bashrc
         - echo 'export KUBECONFIG=/etc/kubernetes/admin.conf' >>/root/.bashrc
         - apt-get -y autoremove && apt-get -y clean all
+        - sysctl --system
         - ip -4 -o addr show scope global | awk '$4 ~ /^10\./ {print $4}' | cut -d/ -f1 | head -n1 > /etc/private-ip
         - echo "KUBELET_EXTRA_ARGS=--node-ip=$(cat /etc/private-ip)" > /etc/default/kubelet
 
@@ -422,6 +428,11 @@ spec:
         owner: root:root
         path: /etc/systemd/system/containerd.service
         permissions: "0744"
+      - path: /etc/sysctl.d/99-fsnotify.conf
+        content: |-
+          fs.inotify.max_user_instances = 8192
+          fs.inotify.max_user_watches = 1048576
+          fs.inotify.max_queued_events = 65536
     initConfiguration:
       nodeRegistration:
         kubeletExtraArgs:
@@ -492,6 +503,7 @@ spec:
       - echo 'source <(kubectl completion bash)' >>/root/.bashrc
       - echo 'export KUBECONFIG=/etc/kubernetes/admin.conf' >>/root/.bashrc
       - apt-get -y autoremove && apt-get -y clean all
+      - sysctl --system
       - ip -4 -o addr show scope global | awk '$4 ~ /^10\./ {print $4}' | cut -d/ -f1 | head -n1 > /etc/private-ip
       - echo "KUBELET_EXTRA_ARGS=--node-ip=$(cat /etc/private-ip)" > /etc/default/kubelet
       - sed -i "s/PRIVATE_IP/$(cat /etc/private-ip)/g" /run/kubeadm/*.yaml

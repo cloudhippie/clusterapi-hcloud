@@ -89,6 +89,14 @@
   },
   {
     "op": "add",
+    "path": "/spec/kubeadmConfigSpec/files/-",
+    "value": {
+      "path": "/etc/sysctl.d/99-fsnotify.conf",
+      "content": "fs.inotify.max_user_instances = 8192\nfs.inotify.max_user_watches = 1048576\nfs.inotify.max_queued_events = 65536"
+    }
+  },
+  {
+    "op": "add",
     "path": "/spec/kubeadmConfigSpec/initConfiguration/localAPIEndpoint",
     "value": {}
   },
@@ -111,6 +119,11 @@
     "op": "add",
     "path": "/spec/kubeadmConfigSpec/joinConfiguration/controlPlane/localAPIEndpoint/advertiseAddress",
     "value": "PRIVATE_IP"
+  },
+  {
+    "op": "add",
+    "path": "/spec/kubeadmConfigSpec/preKubeadmCommands/-",
+    "value": "sysctl --system"
   },
   {
     "op": "add",
