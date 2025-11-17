@@ -9,9 +9,8 @@
     "path": "/metadata/namespace"
   },
   {
-    "op": "add",
-    "path": "/spec/template/spec/placementGroupName",
-    "value": "worker"
+    "op": "remove",
+    "path": "/spec/template/spec/placementGroupName"
   },
   {
     "op": "add",

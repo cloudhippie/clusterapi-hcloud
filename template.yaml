@@ -45,7 +45,6 @@ spec:
   template:
     spec:
       imageName: ubuntu-24.04
-      placementGroupName: worker
       type: ${HCLOUD_WORKER_MACHINE_TYPE}
 
 ...
@@ -96,8 +95,6 @@ spec:
     enabled: true
   hcloudPlacementGroups:
     - name: control-plane
-      type: spread
-    - name: worker
       type: spread
   hetznerSecretRef:
     key:
