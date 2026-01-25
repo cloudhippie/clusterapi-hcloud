@@ -60,7 +60,7 @@
               default = {
                 git-hooks = {
                   hooks = {
-                    nixfmt-rfc-style = {
+                    nixfmt = {
                       enable = true;
                     };
                   };
@@ -71,7 +71,7 @@
                   json-patch
                   kubectl
                   kubectl-slice
-                  nixfmt-rfc-style
+                  nixfmt
                   yamlfmt
                   yamllint
                   yq-go
