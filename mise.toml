@@ -1,0 +1,10 @@
+[tools]
+clusterctl = "1.13.4"
+kubectl = "1.36.3"
+yamlfmt = "0.21.0"
+yamllint = "1.38.0"
+yq = "4.53.3"
+pre-commit = "4.6.1"
+kustomize = "5.8.1"
+
+"github:patrickdappollonio/kubectl-slice" = "1.4.2"

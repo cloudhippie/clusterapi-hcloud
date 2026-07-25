@@ -1,0 +1,34 @@
+---
+# yaml-language-server: $schema=https://www.schemastore.org/github-workflow.json
+name: general
+
+"on":
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  general:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v7
+
+      - name: Setup mise
+        uses: jdx/mise-action@v2
+
+      - name: Update template
+        run: scripts/generate-template
+
+      - name: Test yamllint
+        run: yamllint .
+
+...

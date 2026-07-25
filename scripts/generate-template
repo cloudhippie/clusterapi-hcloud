@@ -35,18 +35,37 @@ mv ${WORKING_DIR}/hcloudmachinetemplate-dummy-md-0.yaml ${WORKING_DIR}/hcloudmac
 mv ${WORKING_DIR}/machinedeployment-dummy-md-0.yaml ${WORKING_DIR}/machinedeployment-fsn1.yaml
 
 for FILE in ${WORKING_DIR}/*.yaml; do
-    for PATCH in ${PATCH_DIR}/$(basename ${FILE} .yaml); do
-        if test -f "${PATCH}.json"; then
-            echo "Applying ${PATCH}.json"
-            cat "${FILE}" \
-                | yq -o json eval \
-                | json-patch --patch-file=${PATCH}.json \
-                | yq -P eval - \
-                >| ${FILE}.temp
+    NAME=$(basename "${FILE}" .yaml)
 
-            mv ${FILE}.temp ${FILE} && rm -f ${FILE}.temp
-        fi
-    done
+    if test -f "${PATCH_DIR}/${NAME}.json"; then
+        echo "Applying ${PATCH_DIR}/${NAME}.json"
+
+        KDIR="$(mktemp -d)"
+        cp "${FILE}" "${KDIR}/resource.yaml"
+        cp "${PATCH_DIR}/${NAME}.json" "${KDIR}/patch.json"
+
+        KIND="$(yq eval '.kind' "${FILE}")"
+        RESOURCE_NAME="$(yq eval '.metadata.name' "${FILE}")"
+
+        cat <<EOF >| "${KDIR}/kustomization.yaml"
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - resource.yaml
+patches:
+  - path: patch.json
+    target:
+      kind: ${KIND}
+      name: ${RESOURCE_NAME}
+EOF
+
+        kustomize build "${KDIR}" \
+            | yq -P eval - \
+            >| ${FILE}.temp
+
+        rm -rf "${KDIR}"
+        mv ${FILE}.temp ${FILE} && rm -f ${FILE}.temp
+    fi
 
     yamlfmt "${FILE}"
 

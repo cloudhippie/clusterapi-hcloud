@@ -4,29 +4,41 @@
 
 This repository generates and defines a template for ClusterAPI.
 
+## Prerequisites
+
+We use [mise][mise] to manage all required tools and their versions. Install it
+by following the [official installation instructions][mise-install], then run
+the following commands inside the repository to activate mise and install all
+tools defined in `mise.toml`:
+
+```console
+mise trust
+mise install
+```
+
 ## Usage
 
 TBD
 
 ## Development
 
-We are using [Nix][nix] to install all required tools automatically. If you
-don't use [Nix][nix] it is up to you to install all required tools:
+We are using [mise][mise] to install all required tools automatically. If you
+don't use [mise][mise] it is up to you to install all required tools:
 
 * [clusterctl][clusterctl]
+* [kubectl][kubectl]
 * [kubectl-slice][slice]
 * [json-patch][jsonpatch]
 * [yamlfmt][yamlfmt]
+* [yamllint][yamllint]
+* [yq][yq]
 
-If you got [Nix][nix] available on your system you can easily use
-[Direnv][direnv] to get started with all the required tools:
+If you got [mise][mise] available on your system you can easily get started
+with all the required tools:
 
 ```console
-cat << EOF >| .envrc
-use flake . --impure
-EOF
-
-direnv allow
+mise trust
+mise install
 ```
 
 After the installation of the required tools you should be able to execute the
@@ -43,7 +55,37 @@ If you find a security issue please contact
 
 ## Contributing
 
-Fork -> Patch -> Push -> Pull Request
+Generally we are following [conventional commits][commits] when we apply
+changes. That way we are able to generate proper changelogs for every release.
+Please use always pull requests to integrate new functionalities or to fix
+issues.
+
+For the release process we are following [semantic versioning][semver] which
+clearly indicates if a new version just resolves bugs, includes new features or
+even includes breaking changes.
+
+After installing the tools via `mise install` as described above set up the
+pre-commit hooks so they run automatically on every commit:
+
+```console
+pre-commit install --hook-type pre-commit --hook-type commit-msg
+```
+
+> `pre-commit` is managed by mise and will be available after `mise install`.
+
+If you have changed something on the source you should simply commit following
+the mentioned conventions:
+
+```console
+git checkout -b feat/new-feature
+git add --all
+git commit -m 'feat: added awesome new feature'
+git push --set-upstream origin feat/new-feature
+```
+
+After pushing your changes into the Git repository you should create a pull
+request on GitHub. If the pull request have been merged and everything built
+fine it will also create automatically a new release at least once a week.
 
 ## Authors
 
@@ -59,9 +101,7 @@ Apache-2.0
 Copyright (c) 2025 Cloudhippie <info@cloudhippie.de>
 ```
 
-[nix]: https://nixos.org/
-[direnv]: https://direnv.net/
-[clusterctl]: https://github.com/kubernetes-sigs/cluster-api
-[slice]: https://github.com/patrickdappollonio/kubectl-slice
-[jsonpatch]: https://github.com/evanphx/json-patch
-[yamlfmt]: https://github.com/google/yamlfmt
+[mise]: https://mise.jdx.dev/
+[mise-install]: https://mise.jdx.dev/getting-started.html
+[commits]: https://www.conventionalcommits.org/en/v1.0.0/
+[semver]: https://semver.org/
