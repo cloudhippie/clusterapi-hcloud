@@ -7,6 +7,10 @@ name: release
   schedule:
     - cron: "0 8 * * 1"
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 

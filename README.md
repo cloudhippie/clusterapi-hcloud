@@ -1,6 +1,6 @@
 # ClusterAPI: Hetzner Cloud
 
-[![Testing Build](https://github.com/cloudhippie/clusterapi-hcloud/actions/workflows/testing.yml/badge.svg)](https://github.com/cloudhippie/clusterapi-hcloud/actions/workflows/testing.yml)
+[![General Build](https://github.com/cloudhippie/clusterapi-hcloud/actions/workflows/general.yml/badge.svg)](https://github.com/cloudhippie/clusterapi-hcloud/actions/workflows/general.yml)
 
 This repository generates and defines a template for ClusterAPI.
 
