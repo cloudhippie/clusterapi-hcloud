@@ -18,29 +18,6 @@ mise install
 
 ## Usage
 
-TBD
-
-## Development
-
-We are using [mise][mise] to install all required tools automatically. If you
-don't use [mise][mise] it is up to you to install all required tools:
-
-* [clusterctl][clusterctl]
-* [kubectl][kubectl]
-* [kubectl-slice][slice]
-* [json-patch][jsonpatch]
-* [yamlfmt][yamlfmt]
-* [yamllint][yamllint]
-* [yq][yq]
-
-If you got [mise][mise] available on your system you can easily get started
-with all the required tools:
-
-```console
-mise trust
-mise install
-```
-
 After the installation of the required tools you should be able to execute the
 script to generate a new template:
 
